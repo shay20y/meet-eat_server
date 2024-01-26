@@ -11,7 +11,7 @@ queueSub();
 
 router.get("/", async (req, res) => {
     const orderDate = req.query.date ? "order by event_date asc" : "";
-    const strSql = `SELECT *,(SELECT count(*) FROM users_events WHERE event_id = events.event_id) current_particepants FROM events where event_date > now() ${orderDate}`;
+    const strSql = `SELECT *,(SELECT count(*) FROM users_events WHERE event_id = events.event_id) current_particepants FROM events where event_date ${orderDate}`;
     sqlCon.query(strSql, (err, results) => {
         if (err) { return res.json(err); }
         res.json(results);
@@ -27,7 +27,6 @@ router.get("/loggedIn/:user_id", async (req, res) => {
         res.json(results);
     })
 })
-
 
 router.get("/forShow", async (req, res) => {
     const strSql = `SELECT events.event_id,title,city,adress,description,date_created,event_date,max_paticipants,(SELECT count(*) FROM users_events WHERE event_id = events.event_id) current_particepants,user_id FROM events,users_events where events.event_id = users_events.event_id`;
